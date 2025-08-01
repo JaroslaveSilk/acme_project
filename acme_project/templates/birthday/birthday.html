@@ -2,13 +2,19 @@
 {% load django_bootstrap5 %}
 
 {% block content %}
-  <form>
-    <!-- Выводим поля формы с помощью специального тега. -->
-    {% bootstrap_form form %}
-    <!-- Добавляем кнопку отправки данных. -->
-    {% bootstrap_button button_type="submit" content="Отправить" %}
-  </form>
+  <div class="card">
+    <div class="card-header">
+      Калькулятор ожидания дня рождения
+    </div>
+    <div class="card-body">
+      <form>
+        {% bootstrap_form form %}
+        {% bootstrap_button button_type="submit" content="Отправить" %}
+      </form>
+    </div>
+  </div>
   {% with data=request.GET %}
+...
   <!-- Поменяйте условие тут -->
     {% if form.is_valid %}
       <h2>Привет, {{ data.first_name }} {{ data.last_name}}</h2>
