@@ -7,11 +7,9 @@
   </form>
   <!-- Присваиваем переменной data объект request.GET -->
   {% with data=request.GET %}
-    <!-- В дальнейшем используем имя data вместо request.GET -->
-    {% if data %}
-      <h2>Привет, {{ data.first_name }} {{ data.last_name }}</h2>
+  <!-- Поменяйте условие тут -->
+    {% if form.is_valid %}
+      <h2>Привет, {{ data.first_name }} {{ data.last_name}}</h2>
     {% endif %}
-  <!-- Когда заканчивается область шаблона, где нужна переменная, 
-    закрываем тег with -->
   {% endwith %}
 {% endblock %}
