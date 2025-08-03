@@ -1,5 +1,5 @@
 # birthday/views.py 
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import BirthdayForm
 # Импортируем из utils.py функцию для подсчёта дней.
@@ -7,8 +7,16 @@ from .utils import calculate_birthday_countdown
 
 from .models import Birthday
 
-def birthday(request):
-    form = BirthdayForm(request.POST or None)
+def birthday(request, pk=None):
+    # Добавим необязательный параметр pk для id в случае редактирования
+    if pk is not None:
+        # В случае если это редактирование - достаем объект из БД
+        instance = get_object_or_404(Birthday, pk=pk)
+    else:
+        # Если нет - объект не требуется
+        instance = None
+    # Привяжем объект если таковой имеется к конструктору формы
+    form = BirthdayForm(request.POST or None, instance=instance)
     # Создаём словарь контекста сразу после инициализации формы.
     context = {'form': form}
     # Если форма валидна...
@@ -29,3 +37,17 @@ def birthday_list(request):
     birthdays = Birthday.objects.all()
     context = {'birthdays': birthdays}
     return render(request, 'birthday/birthday_list.html', context)
+
+
+def delete_birthday(request, pk):
+    # Получаем объект модели или выдаем ошибку.
+    instance = get_object_or_404(Birthday, pk=pk)
+    # Для удаления параметры запроса не нужно - только удаляемый объект.
+    form = BirthdayForm(instance=instance)
+    context = {'form': form}
+    # Если был получен Post-запрос
+    if request.method == 'POST':
+        instance.delete()
+        # затем переадресовываем пользователя на список записей.
+        return redirect('birthday:list')
+    return render(request, 'birthday/birthday.html', context)
