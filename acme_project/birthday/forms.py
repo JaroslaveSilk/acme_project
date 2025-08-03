@@ -1,14 +1,14 @@
 # birthday/forms.py
 from django import forms
+from .models import Birthday
 
 
-class BirthdayForm(forms.Form):
-    first_name = forms.CharField(label='Имя', max_length=20)
-    last_name = forms.CharField(
-        label='Фамилия', required=False, help_text='Необязательное поле'
-    )
-    birthday = forms.DateField(
-        label='Дата рождения',
-        # Указываем, что виджет для ввода даты должен быть с типом date.
-        widget=forms.DateInput(attrs={'type': 'date'})
-    ) 
+class BirthdayForm(forms.ModelForm):
+    # Описывать поля не нужно, ведь они указываются в Мета.
+    class Meta():
+        # Указываем модель, на основе которой будет сттроиться форма.
+        model = Birthday
+        # Указываем какие поля нужно отобразить (все в данном случае)
+        fields = '__all__'
+        # Виджеты полей описываются также в подклассе Meta.
+        widgets = {'birthday': forms.DateInput(attrs={'type':'date'})}
