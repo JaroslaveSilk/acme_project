@@ -15,7 +15,7 @@ class BirthdayForm(forms.ModelForm):
         # Указываем модель, на основе которой будет сттроиться форма.
         model = Birthday
         # Указываем какие поля нужно отобразить (все в данном случае)
-        fields = '__all__'
+        exclude = ('author',)
         # Виджеты полей описываются также в подклассе Meta.
         widgets = {'birthday': forms.DateInput(attrs={'type':'date'},
                                                format='%Y-%m-%d')}
